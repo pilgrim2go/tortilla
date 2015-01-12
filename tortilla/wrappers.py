@@ -48,7 +48,7 @@ debug_messages = {
 }
 
 
-DEBUG_MAX_TEXT_LENGTH = 100
+DEBUG_MAX_TEXT_LENGTH = 10000000
 
 
 if os.name == 'nt':
@@ -160,6 +160,11 @@ class Client(object):
                       status_code=r.status_code, reason=r.reason, text=text)
             if silent:
                 return None
+            if not extension:
+                if method.lower()=='post':
+                    status_path = r.headers['location'] 
+                    return status_path                   
+                return text
             raise e
 
         if cache_lifetime and cache_lifetime > 0 and method.lower() == 'get':
